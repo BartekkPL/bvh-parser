@@ -36,3 +36,6 @@ Makefile
 
 # Editor files
 .vscode/
+
+# Build dir
+bin/
