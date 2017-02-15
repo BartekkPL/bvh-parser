@@ -24,7 +24,7 @@ class Bvh {
       joints_ = arg;
     }
     void set_num_frames(const unsigned arg) { num_frames_ = arg; }
-    void set_frame_time(const double arg) {frame_time_ = arg; }
+    void set_frame_time(const double arg) { frame_time_ = arg; }
 
   private:
     /** A root joint in this bvh file */

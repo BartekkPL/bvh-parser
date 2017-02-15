@@ -1,5 +1,3 @@
-# bvh-parser #
-
 Welcome to **Bvh Parser**, your new C++ library for .bvh file!
 =======================
 

@@ -86,49 +86,60 @@ add_custom_target(
     )
 
 #-------------------------------------------------------------------------------
+# EXTERNAL MODULES
+#-------------------------------------------------------------------------------
+
+# set external modules path
+set(EXT_PROJECTS_DIR ${PROJECT_SOURCE_DIR}/modules)
+
+
+#-------------------------------------------------------------------------------
 # GOOGLETEST MODULE AND ADD TESTS
 #-------------------------------------------------------------------------------
 
+add_subdirectory(${EXT_PROJECTS_DIR}/googletest)
+
+add_definitions(${MSVC_COMPILER_DEFS})
+
+set(PROJECT_TEST_NAME ${PROJECT_NAME}-test)
+
 # set googletest module and add tests
-set(GOOGLETEST_ROOT modules/googletest/googletest CACHE STRING "Google Test source root")
+set(GOOGLETEST_ROOT ${EXT_PROJECTS_DIR}/googletest CACHE STRING "Google Test source root")
 
 message(STATUS "GOOGLETEST_ROOT set to ${GOOGLETEST_ROOT}")
 
 # google test includes
-include_directories(
-    ${PROJECT_SOURCE_DIR}/${GOOGLETEST_ROOT}
-    ${PROJECT_SOURCE_DIR}/${GOOGLETEST_ROOT}/include
-    )
-
-# google test sources
-set(GOOGLETEST_SOURCES
-    ${PROJECT_SOURCE_DIR}/${GOOGLETEST_ROOT}/src/gtest-all.cc
-    ${PROJECT_SOURCE_DIR}/${GOOGLETEST_ROOT}/src/gtest_main.cc
-    )
-
-# mark these files as generated (they may not be present at configure time)
-foreach(_source ${GOOGLETEST_SOURCES})
-    set_source_files_properties(${_source} PROPERTIES GENERATED 1)
-endforeach()
-
-add_library(googletest ${GOOGLETEST_SOURCES})
-
-# update git submodules before building google test
-add_dependencies(googletest update_submodules)
+include_directories(${GTEST_INCLUDE_DIRS})
 
 # unit test executable
 add_executable(
-    unit_tests
+    ${PROJECT_TEST_NAME}
     test/main.cc
     )
 
 # unit test executable depends on google test
-add_dependencies(unit_tests googletest)
+add_dependencies(${PROJECT_TEST_NAME} googletest)
 
 # link unit test executable against google test
+
+if(NOT WIN32 OR MINGW)
+    target_link_libraries(${PROJECT_TEST_NAME}
+        ${GTEST_LIBS_DIR}/libgtest.a
+        ${GTEST_LIBS_DIR}/libgtest_main.a
+        )
+else()
+    target_link_libraries(${PROJECT_TEST_NAME}
+        debug ${GTEST_LIBS_DIR}/DebugLibs/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${CMAKE_FIND_LIBRARY_SUFFIXES}
+        optimized ${GTEST_LIBS_DIR}/ReleaseLibs/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${CMAKE_FIND_LIBRARY_SUFFIXES}
+        )
+    target_link_libraries(${PROJECT_TEST_NAME}
+        debug ${GTEST_LIBS_DIR}/DebugLibs/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main${CMAKE_FIND_LIBRARY_SUFFIXES}
+        optimized ${GTEST_LIBS_DIR}/ReleaseLibs/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main${CMAKE_FIND_LIBRARY_SUFFIXES}
+        )
+endif()
+
 target_link_libraries(
-    unit_tests
-    googletest
+    ${PROJECT_TEST_NAME}
     bvhParser
     pthread
     ${Boost_LIBRARIES}
@@ -141,4 +152,4 @@ enable_testing()
 include(Dart)
 
 # add tests
-add_test(bvhParserTests unit_tests)
+add_test(bvhParserTests ${PROJECT_TEST_NAME})
