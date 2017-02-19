@@ -17,7 +17,7 @@ set (BVH_PARSER_VERSION
 
 # loaction of logger configuration file
 set (EASYLOGGING_CONFIG_FILE_PATH
-    "CMAKE_CURRENT_SOURCE_DIR/easylogging++.config"
+    "${CMAKE_SOURCE_DIR}/easylogging++.config"
     )
 
 # location of additional cmake modules
@@ -31,7 +31,7 @@ include(git-commit-hash)
 get_directory_property(HAS_BVH_PARSER_PARENT PARENT_DIRECTORY)
 
 # if bvh-parser is standalone project or is sub-project
-if(HAS_BVH_PARSER_PARENT)
+if(NOT HAS_BVH_PARSER_PARENT)
   # detect operating system
   message(STATUS "We are on a ${CMAKE_SYSTEM_NAME} system")
   if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
@@ -49,11 +49,6 @@ if(HAS_BVH_PARSER_PARENT)
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 endif()
 
-# configure header file
-configure_file(
-    ${PROJECT_SOURCE_DIR}/cmake/config.h.in
-    ${PROJECT_BINARY_DIR}/config.h
-    )
 #-------------------------------------------------------------------------------
 # BOOST
 #-------------------------------------------------------------------------------
@@ -71,10 +66,10 @@ set (BVH_PARSER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 set (BVH_PARSER_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/bvh-parser.cc)
 
-add_library (bvhParser SHARED ${BVH_PARSER_SOURCES} ${BVH_PARSER_INCLUDE_DIR})
+add_library (bvhParser SHARED ${BVH_PARSER_SOURCES})
 
 target_include_directories (bvhParser PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${BVH_PARSER_INCLUDE_DIR}
     )
 
 # target to update git submodules
@@ -96,17 +91,18 @@ set(EXT_PROJECTS_DIR ${PROJECT_SOURCE_DIR}/modules)
 #-------------------------------------------------------------------------------
 # GOOGLETEST MODULE AND ADD TESTS
 #-------------------------------------------------------------------------------
+if (NOT TARGET googletest)
+    add_subdirectory(${EXT_PROJECTS_DIR}/googletest)
+    # set googletest module and add tests
+    set(GOOGLETEST_ROOT ${EXT_PROJECTS_DIR}/googletest
+        CACHE STRING "Google Test source root")
 
-add_subdirectory(${EXT_PROJECTS_DIR}/googletest)
+    message(STATUS "GOOGLETEST_ROOT set to ${GOOGLETEST_ROOT}")
+endif()
 
 add_definitions(${MSVC_COMPILER_DEFS})
 
 set(PROJECT_TEST_NAME ${PROJECT_NAME}-test)
-
-# set googletest module and add tests
-set(GOOGLETEST_ROOT ${EXT_PROJECTS_DIR}/googletest CACHE STRING "Google Test source root")
-
-message(STATUS "GOOGLETEST_ROOT set to ${GOOGLETEST_ROOT}")
 
 # google test includes
 include_directories(${GTEST_INCLUDE_DIRS})
@@ -116,6 +112,8 @@ add_executable(
     ${PROJECT_TEST_NAME}
     test/main.cc
     )
+
+set(TEST_BVH_PARSER_FILES "${CMAKE_SOURCE_DIR}/test/test-bvh-files")
 
 # unit test executable depends on google test
 add_dependencies(${PROJECT_TEST_NAME} googletest)
@@ -153,3 +151,17 @@ include(Dart)
 
 # add tests
 add_test(bvhParserTests ${PROJECT_TEST_NAME})
+
+#-------------------------------------------------------------------------------
+# GENERATE CONFIGURE FILE
+#-------------------------------------------------------------------------------
+
+# configure header file
+configure_file(
+    ${PROJECT_SOURCE_DIR}/cmake/config.h.in
+    ${PROJECT_BINARY_DIR}/config.h
+    )
+
+# add the binary tree to the search path for include files
+# so that we will find config.h
+include_directories("${PROJECT_BINARY_DIR}")

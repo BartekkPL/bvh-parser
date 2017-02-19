@@ -7,7 +7,7 @@ if(GIT_FOUND)
     ERROR_QUIET
     OUTPUT_STRIP_TRAILING_WHITESPACE
     )
-  message(STATUS "Current comit sha1 is ${GIT_COMMIT_HASH}")
+  message(STATUS "Current commit sha1 is ${GIT_COMMIT_HASH}")
 else()
   set(GIT_COMMIT_HASH "unknown")
 endif()
