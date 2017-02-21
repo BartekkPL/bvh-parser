@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.5)
 project (bvh-parser CXX)
 
 # enable C and C++14 language
@@ -54,8 +54,13 @@ endif()
 #-------------------------------------------------------------------------------
 
 find_package( Boost REQUIRED COMPONENTS filesystem )
-
-include_directories(${Boost_INCLUDE_DIRS})
+if (Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS})
+else()
+    message(ERROR
+        "The Boost library headers were not found; targets depending "
+        "on Boost won't be available.")
+endif()
 
 #-------------------------------------------------------------------------------
 # LIBRARY SOURCES SETTING

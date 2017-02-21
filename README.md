@@ -1,4 +1,5 @@
 Welcome to **Bvh Parser**, your new C++ library for .bvh file!
+[![Build Status](https://travis-ci.org/BartekkPL/bvh-parser.svg?branch=master)](https://travis-ci.org/BartekkPL/bvh-parser)
 =======================
 
   - [Features](#features)
