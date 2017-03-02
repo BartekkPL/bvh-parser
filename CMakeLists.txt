@@ -5,6 +5,12 @@ project (bvh-parser CXX)
 enable_language (C CXX)
 set (CMAKE_CXX_STANDARD 14)
 
+# disable in-source building
+set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
+if ("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
+  message(SEND_ERROR "In-source builds are not allowed.")
+endif ()
+
 # set project version
 set (BVH_PARSER_MAJOR_VERSION 0)
 set (BVH_PARSER_MINOR_VERSION 1)
@@ -49,6 +55,8 @@ if(NOT HAS_BVH_PARSER_PARENT)
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 endif()
 
+set(BVH_PARSER_LIBS_DIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+
 #-------------------------------------------------------------------------------
 # BOOST
 #-------------------------------------------------------------------------------
@@ -92,10 +100,10 @@ add_custom_target(
 # set external modules path
 set(EXT_PROJECTS_DIR ${PROJECT_SOURCE_DIR}/modules)
 
-
 #-------------------------------------------------------------------------------
 # GOOGLETEST MODULE AND ADD TESTS
 #-------------------------------------------------------------------------------
+
 if (NOT TARGET googletest)
     add_subdirectory(${EXT_PROJECTS_DIR}/googletest)
     # set googletest module and add tests
