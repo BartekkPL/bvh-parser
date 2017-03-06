@@ -11,7 +11,7 @@
 
 ## Features ##
 
-  * Logs from working by [**easyloging++**](https://github.com/muflihun/easyloggingpp)
+  * Logs from working provided by [**easyloging++**](https://github.com/muflihun/easyloggingpp)
   * Clear and useful structure for bvh data
   * Tested via [**Google Test**](https://github.com/google/googletest) framework
 
@@ -29,15 +29,15 @@ this library!
 ```
 git clone https://github.com/BartekkPL/bvh-parser.git
 cd bvh-parser/
-mkdir bin
-cd bin/
+mkdir build
+cd build/
 cmake ..
 make
 ```
 
 And after these steps you have builded library ready to use it in new projects!
 
-You found it at **bvh-parser/bin/libbvhParser.so**.
+You found it at **bvh-parser/build/lib/libbvhParser.so**.
 
 ## Projects using this library ##
 
