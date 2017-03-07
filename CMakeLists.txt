@@ -7,8 +7,8 @@ set (CMAKE_CXX_STANDARD 14)
 
 # set project version
 set (BVH_PARSER_MAJOR_VERSION 0)
-set (BVH_PARSER_MINOR_VERSION 1)
-set (BVH_PARSER_PATCH_VERSION 1)
+set (BVH_PARSER_MINOR_VERSION 2)
+set (BVH_PARSER_PATCH_VERSION 0)
 set (BVH_PARSER_VERSION
     "${BVH_PARSER_MAJOR_VERSION}.\
      ${BVH_PARSER_MINOR_VERSION}.\
@@ -98,14 +98,12 @@ set(EXT_PROJECTS_DIR ${PROJECT_SOURCE_DIR}/modules)
 # GOOGLETEST MODULE AND ADD TESTS
 #-------------------------------------------------------------------------------
 
-if (NOT TARGET googletest)
-    add_subdirectory(${EXT_PROJECTS_DIR}/googletest)
-    # set googletest module and add tests
-    set(GOOGLETEST_ROOT ${EXT_PROJECTS_DIR}/googletest
-        CACHE STRING "Google Test source root")
+add_subdirectory(${EXT_PROJECTS_DIR}/googletest)
+# set googletest module and add tests
+set(GOOGLETEST_ROOT ${EXT_PROJECTS_DIR}/googletest
+    CACHE STRING "Google Test source root")
 
-    message(STATUS "GOOGLETEST_ROOT set to ${GOOGLETEST_ROOT}")
-endif()
+message(STATUS "GOOGLETEST_ROOT set to ${GOOGLETEST_ROOT}")
 
 add_definitions(${MSVC_COMPILER_DEFS})
 

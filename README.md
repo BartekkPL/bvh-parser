@@ -18,7 +18,7 @@
 ## Platforms ##
 
 This parser has been used only on Linux, but
-it can works on any other platform as well.
+it probably can works on any other platform as well.
 
 ## Usage ##
 
