@@ -29,6 +29,19 @@ class Joint {
       XROTATION,
       YROTATION
     };
+
+    /**
+     * A string names for each channel
+     */
+    const std::vector<std::string> channel_name_str = {
+      "XPOSITION",
+      "YPOSITION",
+      "ZPOSITION",
+      "ZROTATION",
+      "XROTATION",
+      "YROTATION"
+    };
+
     void add_frame_motion_data(const std::vector <float>& data) {
       channel_data_.push_back(data);
     }
@@ -51,6 +64,15 @@ class Joint {
     void set_children(const std::vector <std::shared_ptr <Joint>>& arg) { children_ = arg; }
     void set_channel_data(const std::vector <std::vector <float>>& arg) {
       channel_data_ = arg;
+    }
+
+    const std::vector<std::string> get_channels_name() {
+      std::vector<std::string> channel_names;
+
+      for (int i = 0; i < channels_order_.size(); i++)
+        channel_names.push_back(channel_name_str[static_cast<int>(channels_order_[i])]);
+
+      return channel_names;
     }
 
   private:
