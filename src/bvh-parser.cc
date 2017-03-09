@@ -96,6 +96,8 @@ int Bvh_parser::parse_hierarchy(std::ifstream& file) {
 
       if (ret)
         return ret;
+
+      bvh_->set_root_joint(rootJoint);
     } else {
       LOG(ERROR) << "Bad structure of .bvh file. Expected " << kRoot
           << ", but found \"" << token << "\"";
@@ -259,7 +261,7 @@ int Bvh_parser::parse_joint(std::ifstream& file,
     //##########################################################################
     } else if (token == "}") {
       joint->set_children(children);
-      parsed == joint;
+      parsed = joint;
       return 0;
     }
 

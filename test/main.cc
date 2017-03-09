@@ -25,4 +25,6 @@ TEST(ExampleFileTest, ParseTest) {
   bvh::Bvh data;
   bf::path sample_path = bf::path(TEST_BVH_FILES_PATH) / "example.bvh";
   ASSERT_EQ(0, parser.parse(sample_path, &data));
+  ASSERT_NE(nullptr, data.root_joint());
+  ASSERT_STREQ("Hips", data.root_joint()->name().c_str());
 }
