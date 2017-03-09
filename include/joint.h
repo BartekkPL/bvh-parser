@@ -51,7 +51,9 @@ class Joint {
     const std::vector <Channel> channels_order() const {
       return channels_order_;
     }
-    const std::vector <std::shared_ptr <Joint>> children() const { return children_; }
+    const std::vector <std::shared_ptr <Joint>> children() const {
+      return children_;
+    }
     const std::vector <std::vector <float>> channel_data() const {
       return channel_data_;
     }
@@ -61,16 +63,22 @@ class Joint {
     void set_channels_order(const std::vector <Channel>& arg) {
       channels_order_ = arg;
     }
-    void set_children(const std::vector <std::shared_ptr <Joint>>& arg) { children_ = arg; }
+    void set_children(const std::vector <std::shared_ptr <Joint>>& arg) {
+      children_ = arg;
+    }
     void set_channel_data(const std::vector <std::vector <float>>& arg) {
       channel_data_ = arg;
     }
 
-    const std::vector<std::string> get_channels_name() {
+    /*! \brief Get vector of channels name
+     *  @return vector of names
+     */
+    const std::vector<std::string> get_channels_name() const {
       std::vector<std::string> channel_names;
 
       for (int i = 0; i < channels_order_.size(); i++)
-        channel_names.push_back(channel_name_str[static_cast<int>(channels_order_[i])]);
+        channel_names.push_back(channel_name_str[static_cast<int>(
+            channels_order_[i])]);
 
       return channel_names;
     }
