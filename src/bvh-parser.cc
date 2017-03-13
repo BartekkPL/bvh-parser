@@ -7,6 +7,9 @@
 #include <ios>
 #include <string>
 
+/** Indicate whether bvh parser allows multi hierarchy or not
+  * Not fully tested
+  */
 #define MULTI_HIERARCHY 0
 
 namespace bf = boost::filesystem;
@@ -60,7 +63,7 @@ int Bvh_parser::parse(const bf::path& path, Bvh* bvh) {
           return ret;
       } else {
         LOG(ERROR) << "Bad structure of .bvh file. " << kHierarchy
-            << " should be on the top of the file";
+                   << " should be on the top of the file";
         return -1;
       }
 #if MULTI_HIERARCHY == 1
@@ -97,10 +100,13 @@ int Bvh_parser::parse_hierarchy(std::ifstream& file) {
       if (ret)
         return ret;
 
+      LOG(INFO) << "There is " << bvh_->num_channels() << " data channels in the"
+                << " file";
+
       bvh_->set_root_joint(rootJoint);
     } else {
       LOG(ERROR) << "Bad structure of .bvh file. Expected " << kRoot
-          << ", but found \"" << token << "\"";
+                 << ", but found \"" << token << "\"";
       return -1;
     }
   }
@@ -118,7 +124,7 @@ int Bvh_parser::parse_hierarchy(std::ifstream& file) {
         return ret;
     } else {
       LOG(ERROR) << "Bad structure of .bvh file. Expected " << kMotion
-          << ", but found \"" << token << "\"";
+                 << ", but found \"" << token << "\"";
       return -1;
     }
   }
@@ -139,7 +145,7 @@ int Bvh_parser::parse_joint(std::ifstream& file,
   std::string name;
   file >> name;
 
-  LOG(DEBUG) << "Joint name : " << name;
+  LOG(TRACE) << "Joint name : " << name;
 
   joint->set_name(name);
 
@@ -166,11 +172,11 @@ int Bvh_parser::parse_joint(std::ifstream& file,
     joint->set_offset(offset);
 
     LOG(TRACE) << "Offset x: " << offset.x << ", y: " << offset.y << ", z: "
-        << offset.z;
+               << offset.z;
 
   } else {
     LOG(ERROR) << "Bad structure of .bvh file. Expected " << kOffset << ", but "
-        << "found \"" << token << "\"";
+               << "found \"" << token << "\"";
 
     return -1;
   }
@@ -183,11 +189,13 @@ int Bvh_parser::parse_joint(std::ifstream& file,
   if (token == kChannels) {
     ret = parse_channel_order(file, joint);
 
+    LOG(TRACE) << "Joint has " << joint->num_channels() << " data channels";
+
     if (ret)
       return ret;
   } else {
     LOG(ERROR) << "Bad structure of .bvh file. Expected " << kChannels
-        << ", but found \"" << token << "\"";
+               << ", but found \"" << token << "\"";
 
     return -1;
   }
@@ -242,15 +250,15 @@ int Bvh_parser::parse_joint(std::ifstream& file,
 
         tmp_joint->set_offset(offset);
 
-        LOG(DEBUG) << "Joint name : EndSite";
+        LOG(TRACE) << "Joint name : EndSite";
         LOG(TRACE) << "Offset x: " << offset.x << ", y: " << offset.y << ", z: "
-            << offset.z;
+                   << offset.z;
 
         file >> token;  // Consuming "}"
 
       } else {
         LOG(ERROR) << "Bad structure of .bvh file. Expected " << kOffset
-            << ", but found \"" << token << "\"";
+                   << ", but found \"" << token << "\"";
 
         return -1;
       }
@@ -269,7 +277,7 @@ int Bvh_parser::parse_joint(std::ifstream& file,
   }
 
   LOG(ERROR) << "Cannot parse joint, unexpected end of file. Last token : "
-      << token;
+             << token;
   return -1;
 }
 
@@ -288,10 +296,10 @@ int Bvh_parser::parse_motion(std::ifstream& file) {
   if (token == kFrames) {
     file >> frames_num;
     bvh_->set_num_frames(frames_num);
-    LOG(DEBUG) << "Num of frames : " << frames_num;
+    LOG(INFO) << "Num of frames : " << frames_num;
   } else {
     LOG(ERROR) << "Bad structure of .bvh file. Expected " << kFrames
-        << ", but found \"" << token << "\"";
+               << ", but found \"" << token << "\"";
 
     return -1;
   }
@@ -304,7 +312,7 @@ int Bvh_parser::parse_motion(std::ifstream& file) {
     file >> token;  // Consuming 'Time:'
     file >> frame_time;
     bvh_->set_frame_time(frame_time);
-    LOG(DEBUG) << "Frame time : " << frame_time;
+    LOG(INFO) << "Frame time : " << frame_time;
 
     float number;
     for (int i = 0; i < frames_num; i++) {
@@ -319,7 +327,7 @@ int Bvh_parser::parse_motion(std::ifstream& file) {
     }
   } else {
     LOG(ERROR) << "Bad structure of .bvh file. Expected " << kFrame
-        << ", but found \"" << token << "\"";
+               << ", but found \"" << token << "\"";
 
     return -1;
   }

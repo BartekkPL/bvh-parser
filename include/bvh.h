@@ -10,8 +10,10 @@ namespace bvh {
 
 class Bvh {
   public:
-    void add_joint(const std::shared_ptr <Joint> joint) {
+    Bvh() : num_frames_(0), frame_time_(0), num_channels_(0) {}
+    void add_joint(const std::shared_ptr<Joint> joint) {
       joints_.push_back(joint);
+      num_channels_ += joint->num_channels();
     }
     const Joint* root_joint() const { return root_joint_.get(); }
     const std::vector <std::shared_ptr <Joint>> joints() const {
@@ -19,6 +21,7 @@ class Bvh {
     }
     unsigned num_frames() const { return num_frames_; }
     double frame_time() const { return frame_time_; }
+    unsigned num_channels() const { return num_channels_; }
     void set_root_joint(const std::shared_ptr<Joint> arg) { root_joint_ = arg; }
     void set_joints(const std::vector <std::shared_ptr <Joint>> arg) {
       joints_ = arg;
@@ -35,6 +38,8 @@ class Bvh {
     unsigned num_frames_;
     /** A time of single frame */
     double frame_time_;
+    /** Number of channels of all joints */
+    unsigned num_channels_;
 };
 
 } // namespace

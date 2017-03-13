@@ -57,6 +57,7 @@ class Joint {
     const std::vector <std::vector <float>> channel_data() const {
       return channel_data_;
     }
+    unsigned num_channels() const { return channels_order_.size(); }
     void set_parent(const std::shared_ptr <Joint> arg) { parent_ = arg; }
     void set_name(const std::string arg) { name_ = arg; }
     void set_offset(const Offset arg) { offset_ = arg; }
