@@ -318,7 +318,7 @@ int Bvh_parser::parse_motion(std::ifstream& file) {
     for (int i = 0; i < frames_num; i++) {
       for (auto joint : bvh_->joints()) {
         std::vector <float> data;
-        for (int j = 0; j < joint->children().size(); j++) {
+        for (int j = 0; j < joint->num_channels(); j++) {
           file >> number;
           data.push_back(number);
         }

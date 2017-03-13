@@ -27,4 +27,9 @@ TEST(ExampleFileTest, ParseTest) {
   ASSERT_EQ(0, parser.parse(sample_path, &data));
   ASSERT_NE(nullptr, data.root_joint());
   ASSERT_STREQ("Hips", data.root_joint()->name().c_str());
+
+  std::vector<std::vector<float>> expected_root_joint_data =
+      {{8.03, 35.01,88.36, -3.41, 14.78, -164.35},
+      {7.81, 35.10, 86.47, -3.78, 12.94, -166.97}};
+  ASSERT_EQ(expected_root_joint_data, data.root_joint()->channel_data());
 }
