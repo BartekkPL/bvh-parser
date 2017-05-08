@@ -14,6 +14,7 @@
   * Logs from working provided by [**easyloging++**](https://github.com/muflihun/easyloggingpp)
   * Clear and useful structure for bvh data
   * Tested via [**Google Test**](https://github.com/google/googletest) framework
+  * Position calculation perform with [**GLM - OpenGL Mathematics**](https://github.com/g-truc/glm) library
 
 ## Platforms ##
 
@@ -24,6 +25,7 @@ it probably can works on any other platform as well.
 
 The only thing what you have to do is build and link
 this library!
+If you wanna know something more please look at tests or simply write mail :)
 
 ### Build ###
 ```

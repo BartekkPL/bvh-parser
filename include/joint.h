@@ -1,6 +1,7 @@
 #ifndef JOINT_H
 #define JOINT_H
 
+#include <glm/glm.hpp>
 #include <memory>
 #include <string>
 #include <vector>
@@ -42,33 +43,81 @@ class Joint {
       "YROTATION"
     };
 
+    void recalculate_position();
+
     void add_frame_motion_data(const std::vector <float>& data) {
       channel_data_.push_back(data);
     }
-    const std::shared_ptr <Joint> parent() const { return parent_; }
-    const std::string name() const { return name_; }
-    const Offset offset() const { return offset_; }
-    const std::vector <Channel> channels_order() const {
+
+    std::shared_ptr <Joint> parent() const { return parent_; }
+
+    std::string name() const { return name_; }
+
+    Offset offset() const { return offset_; }
+
+    std::vector <Channel> channels_order() const {
       return channels_order_;
     }
-    const std::vector <std::shared_ptr <Joint>> children() const {
+
+    std::vector <std::shared_ptr <Joint>> children() const {
       return children_;
     }
-    const std::vector <std::vector <float>> channel_data() const {
+
+    const std::vector <std::vector <float>>& channel_data() const {
       return channel_data_;
     }
+
+    const std::vector <float>& channel_data(unsigned frame) const {
+      return channel_data_[frame];
+    }
+
+    float channel_data(unsigned frame, unsigned channel_num) const {
+      return channel_data_[frame][channel_num];
+    }
+
+    const std::vector <glm::mat4>& matrix() const {
+      return local_transformation_matrix_;
+    }
+
+    glm::mat4 matrix(unsigned frame) const {
+      return local_transformation_matrix_[frame];
+    }
+
+    std::vector <glm::vec4> joint_position() const {
+      return joint_position_;
+    }
+
+    glm::vec4 joint_position(unsigned frame) const {
+      return joint_position_[frame];
+    }
+
     unsigned num_channels() const { return channels_order_.size(); }
+
     void set_parent(const std::shared_ptr <Joint> arg) { parent_ = arg; }
+
     void set_name(const std::string arg) { name_ = arg; }
+
     void set_offset(const Offset arg) { offset_ = arg; }
+
     void set_channels_order(const std::vector <Channel>& arg) {
       channels_order_ = arg;
     }
+
     void set_children(const std::vector <std::shared_ptr <Joint>>& arg) {
       children_ = arg;
     }
+
     void set_channel_data(const std::vector <std::vector <float>>& arg) {
       channel_data_ = arg;
+    }
+
+    void set_matrix(const glm::mat4 matrix, unsigned frame = 0) {
+      if (frame != 0 && frame < local_transformation_matrix_.size()) {
+        local_transformation_matrix_[frame] = matrix;
+        joint_position_[frame] = matrix[3];
+      }
+      local_transformation_matrix_.push_back(matrix);
+      joint_position_.push_back(matrix[3]);
     }
 
     /*! \brief Get vector of channels name
@@ -97,6 +146,10 @@ class Joint {
      *  Each vector keep data for one channel.
      */
     std::vector <std::vector <float> > channel_data_;
+    /** Local transformation matrix for each frame */
+    std::vector <glm::mat4> local_transformation_matrix_;
+    /** Vector x, y, z of joint position for each frame */
+    std::vector <glm::vec4> joint_position_;
 };
 
 } // namespace

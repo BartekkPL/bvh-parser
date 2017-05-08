@@ -4,11 +4,12 @@ project (bvh-parser CXX)
 # enable C and C++14 language
 enable_language (C CXX)
 set (CMAKE_CXX_STANDARD 14)
+set (CMAKE_CXX_FLAGS "-Wall -g")
 
 # set project version
 set (BVH_PARSER_MAJOR_VERSION 0)
-set (BVH_PARSER_MINOR_VERSION 2)
-set (BVH_PARSER_PATCH_VERSION 1)
+set (BVH_PARSER_MINOR_VERSION 3)
+set (BVH_PARSER_PATCH_VERSION 0)
 set (BVH_PARSER_VERSION
     "${BVH_PARSER_MAJOR_VERSION}.\
      ${BVH_PARSER_MINOR_VERSION}.\
@@ -71,7 +72,10 @@ endif()
 set (BVH_PARSER_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set (BVH_PARSER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-set (BVH_PARSER_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/bvh-parser.cc)
+set (BVH_PARSER_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/bvh.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/bvh-parser.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/joint.cc)
 
 add_library (bvhParser SHARED ${BVH_PARSER_SOURCES})
 
@@ -93,6 +97,16 @@ add_custom_target(
 
 # set external modules path
 set(EXT_PROJECTS_DIR ${PROJECT_SOURCE_DIR}/modules)
+
+# add glm sources
+add_subdirectory(${EXT_PROJECTS_DIR}/glm)
+
+include_directories(${GLM_INCLUDE_DIRS})
+target_include_directories(bvhParser PRIVATE
+    ${GLM_INCLUDE_DIRS}
+    )
+
+add_dependencies(bvhParser glm)
 
 #-------------------------------------------------------------------------------
 # GOOGLETEST MODULE AND ADD TESTS
