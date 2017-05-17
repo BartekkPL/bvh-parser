@@ -29,7 +29,7 @@ class Bvh {
       num_channels_ += joint->num_channels();
     }
 
-    const Joint* root_joint() const { return root_joint_.get(); }
+    const std::shared_ptr<Joint> root_joint() const { return root_joint_; }
 
     const std::vector <std::shared_ptr <Joint>> joints() const {
       return joints_;
