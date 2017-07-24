@@ -36,6 +36,9 @@ Makefile
 
 # Editor files
 .vscode/
+.kdev4/
+*.kdev4
 
 # Build dir
 bin/
+build/

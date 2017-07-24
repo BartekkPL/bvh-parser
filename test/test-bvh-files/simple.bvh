@@ -1,0 +1,115 @@
+HIERARCHY
+ROOT Hips
+{
+	OFFSET	0.00	0.00	0.00
+	CHANNELS 6 Xposition Yposition Zposition Zrotation Xrotation Yrotation
+	JOINT Chest
+	{
+		OFFSET	 0.00	 10.00	 0.00
+		CHANNELS 3 Zrotation Xrotation Yrotation
+		JOINT Neck
+		{
+			OFFSET	 0.00	 8.00	 0.00
+			CHANNELS 3 Zrotation Xrotation Yrotation
+			JOINT Head
+			{
+				OFFSET	 0.00	 4.00	 0.00
+				CHANNELS 3 Zrotation Xrotation Yrotation
+				End Site
+				{
+					OFFSET	 0.00	 5.00	 0.00
+				}
+			}
+		}
+		JOINT LeftCollar
+		{
+			OFFSET	 -4.00	 8.00	 0.00
+			CHANNELS 3 Zrotation Xrotation Yrotation
+			JOINT LeftUpArm
+			{
+				OFFSET	 -4.00	 0.00	 0.00
+				CHANNELS 3 Zrotation Xrotation Yrotation
+				JOINT LeftLowArm
+				{
+					OFFSET	 0.00	-8.00	 0.00
+					CHANNELS 3 Zrotation Xrotation Yrotation
+					JOINT LeftHand
+					{
+						OFFSET	 0.00	-10.00	 0.00
+						CHANNELS 3 Zrotation Xrotation Yrotation
+						End Site
+						{
+							OFFSET	 0.00	-4.00	 0.00
+						}
+					}
+				}
+			}
+		}
+		JOINT RightCollar
+		{
+			OFFSET	4.00	 8.00	 0.00
+			CHANNELS 3 Zrotation Xrotation Yrotation
+			JOINT RightUpArm
+			{
+				OFFSET	4.00	 0.00	 0.00
+				CHANNELS 3 Zrotation Xrotation Yrotation
+				JOINT RightLowArm
+				{
+					OFFSET	 0.00	-8.00	 0.00
+					CHANNELS 3 Zrotation Xrotation Yrotation
+					JOINT RightHand
+					{
+						OFFSET	 0.00	-10.00	 0.00
+						CHANNELS 3 Zrotation Xrotation Yrotation
+						End Site
+						{
+							OFFSET	 0.00	-4.00	 0.00
+						}
+					}
+				}
+			}
+		}
+	}
+	JOINT LeftUpLeg
+	{
+		OFFSET	 -4.00	 0.00	 0.00
+		CHANNELS 3 Zrotation Xrotation Yrotation
+		JOINT LeftLowLeg
+		{
+			OFFSET	 0.00	-8.00	 0.00
+			CHANNELS 3 Zrotation Xrotation Yrotation
+			JOINT LeftFoot
+			{
+				OFFSET	 0.00	-8.00	 0.00
+				CHANNELS 3 Zrotation Xrotation Yrotation
+				End Site
+				{
+					OFFSET	 0.00	-4.00	 0.00
+				}
+			}
+		}
+	}
+	JOINT RightUpLeg
+	{
+		OFFSET	4.00	 0.00	 0.00
+		CHANNELS 3 Zrotation Xrotation Yrotation
+		JOINT RightLowLeg
+		{
+			OFFSET	 0.00	-8.00	 0.00
+			CHANNELS 3 Zrotation Xrotation Yrotation
+			JOINT RightFoot
+			{
+				OFFSET	 0.00	-8.00	 0.00
+				CHANNELS 3 Zrotation Xrotation Yrotation
+				End Site
+				{
+					OFFSET	 0.00	-4.00	 0.00
+				}
+			}
+		}
+	}
+}
+MOTION
+Frames:    1
+Frame Time: 1.00
+ 0.00	 0.00	 0.00	 45.00	 45.00	 45.00	 0.00	 0.00	 0.00	 0.00	 0.00	 0.00	0.00	 0.00	 0.00	 0.00	 0.00	 0.00	 0.00	 0.00	 0.00	0.00	 0.00	 0.00	 0.00	 0.00	 0.00	0.00	 0.00	 0.00	0.00	 0.00	 0.00	 0.00	 0.00	 0.00	0.00	 0.00	 0.00	 0.00	 0.00	 0.00	 0.00	 0.00	 0.00	 0.00	0.00	 0.00	 0.00	0.00	 0.00	 0.00	 0.00	 0.00	 0.00	0.00	 0.00

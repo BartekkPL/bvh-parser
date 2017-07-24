@@ -5,6 +5,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <ios>
+#include <sstream>
 #include <string>
 
 /** Indicate whether bvh parser allows multi hierarchy or not
@@ -322,6 +323,7 @@ int Bvh_parser::parse_motion(std::ifstream& file) {
           file >> number;
           data.push_back(number);
         }
+        // LOG(TRACE) << joint->name() << ": " << vtos(data);
         joint->add_frame_motion_data(data);
       }
     }
@@ -372,6 +374,22 @@ int Bvh_parser::parse_channel_order(std::ifstream& file,
 
   joint->set_channels_order(channels);
   return 0;
+}
+
+std::string Bvh_parser::vtos(const std::vector <float>& vector) {
+  std::ostringstream oss;
+
+  if (!vector.empty())
+  {
+    // Convert all but the last element to avoid a trailing ","
+    std::copy(vector.begin(), vector.end()-1,
+        std::ostream_iterator<float>(oss, ", "));
+
+    // Now add the last element with no delimiter
+    oss << vector.back();
+  }
+
+  return oss.str();
 }
 
 } // namespace

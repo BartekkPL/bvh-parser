@@ -38,6 +38,8 @@ class Bvh_parser {
           std::bind( std::isspace<char>, std::placeholders::_1,
           std::locale::classic() ) ), s.end() );
     }
+    /** Converts the vector to string, ex. "el1, el2, el3" */
+    std::string vtos(const std::vector <float> &vector);
     bf::path path_;
     Bvh* bvh_;
 };

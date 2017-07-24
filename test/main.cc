@@ -3,10 +3,14 @@
 #include "bvh-parser.h"
 #include "config.h"
 #include "easylogging++.h"
+#include "utils.h"
 
 #include <boost/filesystem.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#define DEBUG true
 
 namespace bf = boost::filesystem;
 
@@ -39,16 +43,30 @@ TEST(ExampleFileTest, ParseTest) {
 TEST(ExampleFileTest, MotionCalculationTest) {
   bvh::Bvh_parser parser;
   bvh::Bvh data;
-  bf::path sample_path = bf::path(TEST_BVH_FILES_PATH) / "example.bvh";
+  bf::path sample_path = bf::path(TEST_BVH_FILES_PATH) / "simple.bvh";
   ASSERT_EQ(0, parser.parse(sample_path, &data));
   data.recalculate_joints_ltm();
 
-  glm::vec3 expected_position_01(-17.786824, -46.734459, 81.223086);
-  for(int i = 0; i < data.joints().size(); i++)
-    std::cout << "NAME: " << data.joints()[i]->name() << ", x = " << data.joints()[i]->joint_position(0).x << ",y = " <<   data.joints()[i]->joint_position(0).y << ", z = " << data.joints()[i]->joint_position(0).z << "\n";
-//   ASSERT_EQ(data.root_joint()->joint_position(0), expected_position_01);
-}
+  glm::vec3 expected_position_01(-1.464466, 5, 8.535533);
 
-TEST(GlmTest, RotationTest) {
-  glm::mat4 matrix(1.0);
+#if DEBUG == true
+  for(int i = 0; i < data.joints().size(); i++) {
+    std::cout << "NAME: " << data.joints()[i]->name() << ", x = " << data.joints()[i]->joint_position(0).x << ",y = " << data.joints()[i]->joint_position(0).y << ", z = " << data.joints()[i]->joint_position(0).z << "\n";
+  }
+#endif
+
+  ASSERT_FLOAT_EQ(data.root_joint()->children()[0]->joint_position(0).x, expected_position_01.x);
+  ASSERT_FLOAT_EQ(data.root_joint()->children()[0]->joint_position(0).y, expected_position_01.y);
+  ASSERT_FLOAT_EQ(data.root_joint()->children()[0]->joint_position(0).z, expected_position_01.z);
+
+  // std::cout << "Macierz jednostkowa 4x4: \n";
+  // glm::mat4 unitymat = glm::mat4(1.0);
+  // for (int i = 0; i < 16; i++)
+  //   std::cout << ((const float*)glm::value_ptr(unitymat))[i] << " ";
+
+  // unitymat = glm::translate(unitymat, glm::vec3(0, 10, 0));
+  // glm::mat4 rotationx90 = glm::rotate(unitymat, 90.0f, glm::vec3(1, 0, 0));
+  // std::cout << "Macierz po obrocie o 90 stopni: \n";
+  // for (int i = 0; i < 16; i++)
+  //   std::cout << ((const float*)glm::value_ptr(rotationx90))[i] << " ";
 }
