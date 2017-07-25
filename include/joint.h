@@ -43,8 +43,6 @@ class Joint {
       "YROTATION"
     };
 
-    void recalculate_position();
-
     void add_frame_motion_data(const std::vector <float>& data) {
       channel_data_.push_back(data);
     }

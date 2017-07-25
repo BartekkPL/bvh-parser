@@ -7,14 +7,19 @@ set (CMAKE_CXX_STANDARD 14)
 set (CMAKE_CXX_FLAGS "-Wall -g")
 
 # set project version
-set (BVH_PARSER_MAJOR_VERSION 0)
-set (BVH_PARSER_MINOR_VERSION 3)
+set (BVH_PARSER_MAJOR_VERSION 1)
+set (BVH_PARSER_MINOR_VERSION 0)
 set (BVH_PARSER_PATCH_VERSION 0)
 set (BVH_PARSER_VERSION
     "${BVH_PARSER_MAJOR_VERSION}.\
      ${BVH_PARSER_MINOR_VERSION}.\
      ${BVH_PARSER_PATCH_VERSION}"
      )
+
+message(STATUS "Start of execution CMake for BVH Parser in version "
+        "${BVH_PARSER_MAJOR_VERSION}.${BVH_PARSER_MINOR_VERSION}."
+        "${BVH_PARSER_PATCH_VERSION}"
+       )
 
 # loaction of logger configuration file
 set (EASYLOGGING_CONFIG_FILE_PATH
@@ -75,7 +80,7 @@ set (BVH_PARSER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set (BVH_PARSER_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/bvh.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/src/bvh-parser.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/joint.cc)
+    )
 
 add_library (bvhParser SHARED ${BVH_PARSER_SOURCES})
 
