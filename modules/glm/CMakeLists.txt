@@ -1,7 +1,8 @@
 include(ExternalProject)
 
 ExternalProject_Add(glm
-    DOWNLOAD_COMMAND ${CMAKE_COMMAND} -DGIT_REPO=https://github.com/g-truc/glm -DGIT_REPO_DIR=glm -P ${PROJECT_SOURCE_DIR}/cmake/git_sparse_checkout.cmake
+    #if you want use newest glm please remove -DGIT_TAG flag
+    DOWNLOAD_COMMAND ${CMAKE_COMMAND} -DGIT_REPO=https://github.com/g-truc/glm -DGIT_TAG=27f8e5b0a161b49f06ff259ca783dabd7a9498fd -DGIT_REPO_DIR=glm -P ${PROJECT_SOURCE_DIR}/cmake/git_sparse_checkout.cmake
     PREFIX "${CMAKE_CURRENT_BINARY_DIR}"
     # Disable configure, build and install step
     CONFIGURE_COMMAND ""
