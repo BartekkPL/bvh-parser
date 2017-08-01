@@ -32,11 +32,11 @@ void Bvh::recalculate_joints_ltm(std::shared_ptr<Joint> start_joint) {
 
     for (int j = start_joint->channels_order().size() - 1; j >= 0; j--) {
       if (start_joint->channels_order()[j] == Joint::Channel::XPOSITION)
-        matrix = glm::translate(matrix, glm::vec3(data[i][j], 0, 0));
+        matrix = utils::translate(matrix, glm::vec3(data[i][j], 0, 0));
       else if (start_joint->channels_order()[j] == Joint::Channel::YPOSITION)
-        matrix = glm::translate(matrix, glm::vec3(0, data[i][j], 0));
+        matrix = utils::translate(matrix, glm::vec3(0, data[i][j], 0));
       else if (start_joint->channels_order()[j] == Joint::Channel::ZPOSITION)
-        matrix = glm::translate(matrix, glm::vec3(0, 0, data[i][j]));
+        matrix = utils::translate(matrix, glm::vec3(0, 0, data[i][j]));
       else if (start_joint->channels_order()[j] == Joint::Channel::XROTATION)
         matrix = utils::rotate(matrix, data[i][j], utils::Axis::X);
       else if (start_joint->channels_order()[j] == Joint::Channel::YROTATION)
