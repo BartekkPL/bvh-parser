@@ -74,19 +74,27 @@ class Joint {
     }
 
     const std::vector <glm::mat4>& matrix() const {
-      return local_transformation_matrix_;
+      return ltm_;
     }
 
     glm::mat4 matrix(unsigned frame) const {
-      return local_transformation_matrix_[frame];
+      return ltm_[frame];
     }
 
-    std::vector <glm::vec4> joint_position() const {
-      return joint_position_;
+    std::vector <glm::mat4> ltm() const {
+      return ltm_;
     }
 
-    glm::vec4 joint_position(unsigned frame) const {
-      return joint_position_[frame];
+    glm::mat4 ltm(unsigned frame) const {
+      return ltm_[frame];
+    }
+
+    std::vector <glm::vec3> pos() const {
+      return pos_;
+    }
+
+    glm::vec3 pos(unsigned frame) const {
+      return pos_[frame];
     }
 
     unsigned num_channels() const { return channels_order_.size(); }
@@ -109,13 +117,28 @@ class Joint {
       channel_data_ = arg;
     }
 
-    void set_matrix(const glm::mat4 matrix, unsigned frame = 0) {
-      if (frame != 0 && frame < local_transformation_matrix_.size()) {
-        local_transformation_matrix_[frame] = matrix;
-        joint_position_[frame] = matrix[3];
-      }
-      local_transformation_matrix_.push_back(matrix);
-      joint_position_.push_back(matrix[3]);
+    /*! \brief Sets local transformation matrix for selected frame
+     *  @param  matrix  The local transformation matrix to be set
+     *  @param  frame   The number of frame for which you want set ltm. As
+                        default it is set to 0.
+     */
+    void set_ltm(const glm::mat4 matrix, unsigned frame = 0) {
+      if (frame > 0 && frame < ltm_.size())
+        ltm_[frame] = matrix;
+      else
+        ltm_.push_back(matrix);
+    }
+
+    /*! \brief Sets local transformation matrix for selected frame
+     *  @param  pos     The position of joint in selected frame to be set
+     *  @param  frame   The number of frame for which you want set position. As
+                        default it is set to 0.
+     */
+    void set_pos(const glm::vec3 pos, unsigned frame = 0) {
+      if (frame > 0 && frame < pos_.size())
+        pos_[frame] = pos;
+      else
+        pos_.push_back(pos);
     }
 
     /*! \brief Get vector of channels name
@@ -145,9 +168,9 @@ class Joint {
      */
     std::vector <std::vector <float> > channel_data_;
     /** Local transformation matrix for each frame */
-    std::vector <glm::mat4> local_transformation_matrix_;
+    std::vector <glm::mat4> ltm_;
     /** Vector x, y, z of joint position for each frame */
-    std::vector <glm::vec4> joint_position_;
+    std::vector <glm::vec3> pos_;
 };
 
 } // namespace

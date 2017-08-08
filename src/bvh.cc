@@ -19,42 +19,47 @@ void Bvh::recalculate_joints_ltm(std::shared_ptr<Joint> start_joint) {
 
   LOG(DEBUG) << "recalculate_joints_ltm: " << start_joint->name();
 
-  glm::mat4 origin_matrix = glm::translate(glm::mat4(1.0),
+  glm::mat4 offmat_backup = glm::translate(glm::mat4(1.0),
         glm::vec3(start_joint->offset().x, start_joint->offset().y,
         start_joint->offset().z));
-
-  LOG(TRACE) << utils::mat4tos(origin_matrix);
 
   std::vector<std::vector<float>> data = start_joint->channel_data();
 
   for (int i = 0; i < num_frames_; i++) {
-    glm::mat4 matrix = origin_matrix;
+    glm::mat4 offmat = offmat_backup; // offset matrix
+    glm::mat4 rmat(1.0);  // identity matrix set on rotation matrix
+    glm::mat4 tmat(1.0);  // identity matrix set on translation matrix
 
-    for (int j = start_joint->channels_order().size() - 1; j >= 0; j--) {
+    for (int j = 0;  j < start_joint->channels_order().size(); j++) {
       if (start_joint->channels_order()[j] == Joint::Channel::XPOSITION)
-        matrix = utils::translate(matrix, glm::vec3(data[i][j], 0, 0));
+        tmat = glm::translate(tmat, glm::vec3(data[i][j], 0, 0));
       else if (start_joint->channels_order()[j] == Joint::Channel::YPOSITION)
-        matrix = utils::translate(matrix, glm::vec3(0, data[i][j], 0));
+        tmat = glm::translate(tmat, glm::vec3(0, data[i][j], 0));
       else if (start_joint->channels_order()[j] == Joint::Channel::ZPOSITION)
-        matrix = utils::translate(matrix, glm::vec3(0, 0, data[i][j]));
+        tmat = glm::translate(tmat, glm::vec3(0, 0, data[i][j]));
       else if (start_joint->channels_order()[j] == Joint::Channel::XROTATION)
-        matrix = utils::rotate(matrix, data[i][j], utils::Axis::X);
+        rmat = utils::rotate(rmat, data[i][j], utils::Axis::X);
       else if (start_joint->channels_order()[j] == Joint::Channel::YROTATION)
-        matrix = utils::rotate(matrix, data[i][j], utils::Axis::Y);
+        rmat = utils::rotate(rmat, data[i][j], utils::Axis::Y);
       else if (start_joint->channels_order()[j] == Joint::Channel::ZROTATION)
-        matrix = utils::rotate(matrix, data[i][j], utils::Axis::Z);
+        rmat = utils::rotate(rmat, data[i][j], utils::Axis::Z);
     }
 
-    LOG(TRACE) << "Matrix after channels applying: \n"
-              << utils::mat4tos(matrix);
+    glm::mat4 ltm; // local transformation matrix
 
     if (start_joint->parent() != NULL)
-      matrix = start_joint->parent()->matrix(i) * matrix;
+      ltm = start_joint->parent()->ltm(i) * offmat;
+    else
+      ltm = tmat * offmat;
 
-    LOG(TRACE) << "Matrix after applying parent matrix: \n"
-              << utils::mat4tos(matrix);
+    start_joint->set_pos(ltm[3]);
+    LOG(TRACE) << "Joint world position: " << utils::vec3tos(ltm[3]);
 
-    start_joint->set_matrix(matrix, i);
+    ltm = ltm * rmat;
+
+    LOG(TRACE) << "Local transformation matrix: \n" << utils::mat4tos(ltm);
+
+    start_joint->set_ltm(ltm, i);
   }
 
   for (auto& child : start_joint->children()) {

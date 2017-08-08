@@ -1,6 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <cmath>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <limits>
@@ -14,16 +15,18 @@ enum class Axis {
 };
 
 glm::mat4 rotation_matrix(float angle, Axis axis) {
-  glm::mat4 matrix(1.0);
-  // We want to unique situation when in matrix are -0.0f
-  float sin_a = glm::sin(glm::radians(angle));
-  if ((sin_a - -0.0f) < std::numeric_limits<float>::epsilon())
+  glm::mat4 matrix(1.0);  // identity matrix
+  float rangle = glm::radians(angle);
+  // We want to unique situation when in matrix are -0.0f, so we perform
+  // additional checking
+  float sin_a = glm::sin(rangle);
+  if (fabs(sin_a) < std::numeric_limits<float>::epsilon())
     sin_a = 0.0f;
-  float cos_a = glm::cos(glm::radians(angle));
-  if ((cos_a - -0.0f) < std::numeric_limits<float>::epsilon())
+  float cos_a = glm::cos(rangle);
+  if (fabs(cos_a) < std::numeric_limits<float>::epsilon())
     cos_a = 0.0f;
-  float msin_a = (sin_a - 0.0f) < std::numeric_limits<float>::epsilon()
-      || (sin_a - -0.0f) < std::numeric_limits<float>::epsilon() ? 0.0f : (-1.0f) * sin_a;
+  float msin_a = fabs(sin_a) < std::numeric_limits<float>::epsilon() ?
+      0.0f : (-1.0f) * sin_a;
 
   if (axis == Axis::X) {
     ((float*)glm::value_ptr(matrix))[5] = cos_a;
@@ -67,11 +70,14 @@ std::string mat4tos(const glm::mat4& matrix) {
   return result;
 }
 
-std::string vec4tos(const glm::vec4 &vector)
+std::string vec3tos(const glm::vec3 &vector)
 {
   std::string result;
-  for (int i = 0; i < 4; i++)
-    result += std::to_string(((float *)glm::value_ptr(vector))[i]) + "\t";
+  for (int i = 0; i < 3; i++) {
+    result += std::to_string(((float *)glm::value_ptr(vector))[i]);
+    if (i != 2)
+      result += ", ";
+  }
 
   result += "\n";
 
