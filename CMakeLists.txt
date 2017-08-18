@@ -4,12 +4,12 @@ project (bvh-parser CXX)
 # enable C and C++14 language
 enable_language (C CXX)
 set (CMAKE_CXX_STANDARD 14)
-set (CMAKE_CXX_FLAGS "-Wall -g")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wno-sign-compare -g")
 
 # set project version
 set (BVH_PARSER_MAJOR_VERSION 1)
 set (BVH_PARSER_MINOR_VERSION 0)
-set (BVH_PARSER_PATCH_VERSION 3)
+set (BVH_PARSER_PATCH_VERSION 4)
 set (BVH_PARSER_VERSION
     "${BVH_PARSER_MAJOR_VERSION}.\
      ${BVH_PARSER_MINOR_VERSION}.\
