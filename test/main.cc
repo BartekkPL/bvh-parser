@@ -55,18 +55,4 @@ TEST(ExampleFileTest, MotionCalculationTest) {
   }
 #endif
 
-  // ASSERT_FLOAT_EQ(data.root_joint()->children()[0]->joint_position(0).x, expected_position_01.x);
-  // ASSERT_FLOAT_EQ(data.root_joint()->children()[0]->joint_position(0).y, expected_position_01.y);
-  // ASSERT_FLOAT_EQ(data.root_joint()->children()[0]->joint_position(0).z, expected_position_01.z);
-
-  // std::cout << "Macierz jednostkowa 4x4: \n";
-  // glm::mat4 unitymat = glm::mat4(1.0);
-  // for (int i = 0; i < 16; i++)
-  //   std::cout << ((const float*)glm::value_ptr(unitymat))[i] << " ";
-
-  // unitymat = glm::translate(unitymat, glm::vec3(0, 10, 0));
-  // glm::mat4 rotationx90 = glm::rotate(unitymat, 90.0f, glm::vec3(1, 0, 0));
-  // std::cout << "Macierz po obrocie o 90 stopni: \n";
-  // for (int i = 0; i < 16; i++)
-  //   std::cout << ((const float*)glm::value_ptr(rotationx90))[i] << " ";
 }
